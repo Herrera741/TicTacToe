@@ -9,21 +9,23 @@
 /* Begin PBXBuildFile section */
 		B4DBB20C29B5814600CE4BC0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBB20B29B5814600CE4BC0 /* AppDelegate.swift */; };
 		B4DBB20E29B5814600CE4BC0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBB20D29B5814600CE4BC0 /* SceneDelegate.swift */; };
-		B4DBB21029B5814600CE4BC0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBB20F29B5814600CE4BC0 /* ViewController.swift */; };
+		B4DBB21029B5814600CE4BC0 /* LoadingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBB20F29B5814600CE4BC0 /* LoadingVC.swift */; };
 		B4DBB21329B5814600CE4BC0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4DBB21129B5814600CE4BC0 /* Main.storyboard */; };
 		B4DBB21529B5814A00CE4BC0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4DBB21429B5814A00CE4BC0 /* Assets.xcassets */; };
 		B4DBB21829B5814A00CE4BC0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4DBB21629B5814A00CE4BC0 /* LaunchScreen.storyboard */; };
+		B4DBB22129B582EF00CE4BC0 /* GameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBB22029B582EF00CE4BC0 /* GameVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B4DBB20829B5814600CE4BC0 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4DBB20B29B5814600CE4BC0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4DBB20D29B5814600CE4BC0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		B4DBB20F29B5814600CE4BC0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B4DBB20F29B5814600CE4BC0 /* LoadingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingVC.swift; sourceTree = "<group>"; };
 		B4DBB21229B5814600CE4BC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B4DBB21429B5814A00CE4BC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B4DBB21729B5814A00CE4BC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B4DBB21929B5814A00CE4BC0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B4DBB22029B582EF00CE4BC0 /* GameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +58,24 @@
 		B4DBB20A29B5814600CE4BC0 /* TicTacToe */ = {
 			isa = PBXGroup;
 			children = (
+				B4DBB21F29B582B000CE4BC0 /* Controller */,
 				B4DBB20B29B5814600CE4BC0 /* AppDelegate.swift */,
 				B4DBB20D29B5814600CE4BC0 /* SceneDelegate.swift */,
-				B4DBB20F29B5814600CE4BC0 /* ViewController.swift */,
 				B4DBB21129B5814600CE4BC0 /* Main.storyboard */,
 				B4DBB21429B5814A00CE4BC0 /* Assets.xcassets */,
 				B4DBB21629B5814A00CE4BC0 /* LaunchScreen.storyboard */,
 				B4DBB21929B5814A00CE4BC0 /* Info.plist */,
 			);
 			path = TicTacToe;
+			sourceTree = "<group>";
+		};
+		B4DBB21F29B582B000CE4BC0 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B4DBB20F29B5814600CE4BC0 /* LoadingVC.swift */,
+				B4DBB22029B582EF00CE4BC0 /* GameVC.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,8 +149,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B4DBB21029B5814600CE4BC0 /* ViewController.swift in Sources */,
+				B4DBB21029B5814600CE4BC0 /* LoadingVC.swift in Sources */,
 				B4DBB20C29B5814600CE4BC0 /* AppDelegate.swift in Sources */,
+				B4DBB22129B582EF00CE4BC0 /* GameVC.swift in Sources */,
 				B4DBB20E29B5814600CE4BC0 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
