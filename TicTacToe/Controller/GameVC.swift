@@ -21,6 +21,12 @@ class GameVC: UIViewController {
     @IBOutlet weak var gameBoardBtn9: UIButton!
 
     var playerTurn = "X"
+    var playerOne = "X"
+    var playerTwo = "O"
+    
+    var playerOneScore = 0
+    var playerTwoScore = 0
+    
     var board = [UIButton]()
 
     override func viewDidLoad() {
@@ -53,9 +59,57 @@ class GameVC: UIViewController {
     @IBAction func gameBoardBtnTapped(_ sender: UIButton) {
         addMoveToBoard(sender)
         
+        if isWinningMove(playerOne) {
+            playerOneScore += 1
+            gameOverAlert(title: "Cross wins!")
+        }
+        
+        if isWinningMove(playerTwo) {
+            playerTwoScore += 1
+            gameOverAlert(title: "Circle wins!")
+        }
+        
         if isFullBoard() {
             gameOverAlert(title: "Draw")
         }
+    }
+    
+    func isWinningMove(_ s: String) -> Bool {
+        // horizontal wins
+        if isPlayerSymbol(gameBoardBtn1, s) && isPlayerSymbol(gameBoardBtn2, s) && isPlayerSymbol(gameBoardBtn3, s) {
+            return true
+        }
+        if isPlayerSymbol(gameBoardBtn4, s) && isPlayerSymbol(gameBoardBtn5, s) && isPlayerSymbol(gameBoardBtn6, s) {
+            return true
+        }
+        if isPlayerSymbol(gameBoardBtn7, s) && isPlayerSymbol(gameBoardBtn8, s) && isPlayerSymbol(gameBoardBtn9, s) {
+            return true
+        }
+        
+        // vertical wins
+        if isPlayerSymbol(gameBoardBtn1, s) && isPlayerSymbol(gameBoardBtn4, s) && isPlayerSymbol(gameBoardBtn7, s) {
+            return true
+        }
+        if isPlayerSymbol(gameBoardBtn2, s) && isPlayerSymbol(gameBoardBtn5, s) && isPlayerSymbol(gameBoardBtn8, s) {
+            return true
+        }
+        if isPlayerSymbol(gameBoardBtn3, s) && isPlayerSymbol(gameBoardBtn6, s) && isPlayerSymbol(gameBoardBtn9, s) {
+            return true
+        }
+        
+        // diagonal wins
+        if isPlayerSymbol(gameBoardBtn1, s) && isPlayerSymbol(gameBoardBtn5, s) && isPlayerSymbol(gameBoardBtn9, s) {
+            return true
+        }
+        if isPlayerSymbol(gameBoardBtn3, s) && isPlayerSymbol(gameBoardBtn5, s) && isPlayerSymbol(gameBoardBtn7, s) {
+            return true
+        }
+        
+        return false
+    }
+    
+    func isPlayerSymbol(_ button: UIButton, _ symbol: String) -> Bool {
+        return button.title(for: .normal) == symbol
     }
 
     // add player move to board
@@ -78,7 +132,8 @@ class GameVC: UIViewController {
     }
     
     func gameOverAlert(title: String) {
-        let alertController = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        let message = "\nCircle \(playerTwoScore) \n\nCross \(playerOneScore)"
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (_) in
             self.resetBoard()
         }))
