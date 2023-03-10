@@ -46,40 +46,37 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Ldf-4e-hYA">
                                         <rect key="frame" x="0.0" y="0.0" width="353.66666666666669" height="114.66666666666667"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uVP-DS-YtK">
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wcm-3Q-Alj">
                                                 <rect key="frame" x="0.0" y="0.0" width="114.66666666666667" height="114.66666666666667"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="T3m-8b-usQ"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="dQ0-Ye-gJq"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RPA-mA-wiv">
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2KV-QW-wxq">
                                                 <rect key="frame" x="119.66666666666669" y="0.0" width="114.33333333333331" height="114.66666666666667"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="eD1-Uw-96v"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="rqm-6v-N7e"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfg-SR-DfY">
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VWK-EZ-yaV">
                                                 <rect key="frame" x="239.00000000000003" y="0.0" width="114.66666666666666" height="114.66666666666667"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="tSV-yL-Tid"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="7IZ-5T-wEn"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -87,40 +84,37 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="vPD-ju-aP4">
                                         <rect key="frame" x="0.0" y="119.66666666666663" width="353.66666666666669" height="114.33333333333331"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ANi-3S-l85">
+                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PGY-dC-9rj">
                                                 <rect key="frame" x="0.0" y="0.0" width="114.66666666666667" height="114.33333333333333"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="8gT-sR-a2M"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="TJP-aI-lKn"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RqJ-l2-4ah">
+                                            <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9M-Vd-I2w">
                                                 <rect key="frame" x="119.66666666666669" y="0.0" width="114.33333333333331" height="114.33333333333333"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="QQn-r3-nky"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="Rsk-25-fOF"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MET-Gh-AmJ">
+                                            <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tHG-UW-k5j">
                                                 <rect key="frame" x="239.00000000000003" y="0.0" width="114.66666666666666" height="114.33333333333333"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="Bjz-wC-vMr"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="RdX-Af-DSB"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -128,40 +122,37 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="8aU-nZ-lIa">
                                         <rect key="frame" x="0.0" y="238.99999999999997" width="353.66666666666669" height="114.66666666666666"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yRz-8o-lR0">
+                                            <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="reI-OI-98b">
                                                 <rect key="frame" x="0.0" y="0.0" width="114.66666666666667" height="114.66666666666667"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="HRQ-FP-ezE"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="opZ-Me-a1P"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ESM-ch-ajc">
+                                            <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HPt-fk-hYp">
                                                 <rect key="frame" x="119.66666666666669" y="0.0" width="114.33333333333331" height="114.66666666666667"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="Zpo-bA-9NU"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="Ljs-vU-vPt"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EeZ-dK-m7f">
+                                            <button opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4T-Oe-U7M">
                                                 <rect key="frame" x="239.00000000000003" y="0.0" width="114.66666666666666" height="114.66666666666667"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 <state key="normal">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="gameBoardBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="2sI-Gi-B2a"/>
+                                                    <action selector="gameBtnTapped:" destination="VRg-Ly-bJI" eventType="touchUpInside" id="ifx-eE-G9d"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -178,37 +169,39 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="X" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h1H-zb-uzo">
-                                <rect key="frame" x="175" y="91" width="43" height="71.666666666666686"/>
-                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="60"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v3G-6z-lKP">
+                                <rect key="frame" x="171.66666666666666" y="91" width="50" height="50"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="NB0-Nd-rmQ"/>
+                                    <constraint firstAttribute="height" constant="50" id="OsO-UI-zhn"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="m4Y-br-JCN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="w3D-dB-aFz" firstAttribute="centerX" secondItem="m4Y-br-JCN" secondAttribute="centerX" id="3KW-Ve-Wse"/>
-                            <constraint firstItem="h1H-zb-uzo" firstAttribute="top" secondItem="u7k-6T-UMh" secondAttribute="bottom" constant="8" symbolic="YES" id="8f8-eu-YoT"/>
                             <constraint firstItem="w3D-dB-aFz" firstAttribute="width" secondItem="9rg-sa-jLI" secondAttribute="width" multiplier="0.9" id="EJw-k7-ij0"/>
                             <constraint firstItem="w3D-dB-aFz" firstAttribute="centerY" secondItem="m4Y-br-JCN" secondAttribute="centerY" id="Qfs-dj-Dtr"/>
-                            <constraint firstItem="h1H-zb-uzo" firstAttribute="centerX" secondItem="u7k-6T-UMh" secondAttribute="centerX" id="VFp-IW-uNQ"/>
+                            <constraint firstItem="v3G-6z-lKP" firstAttribute="top" secondItem="u7k-6T-UMh" secondAttribute="bottom" constant="8" symbolic="YES" id="Y6z-7U-9T5"/>
                             <constraint firstItem="u7k-6T-UMh" firstAttribute="top" secondItem="m4Y-br-JCN" secondAttribute="top" id="aYA-CL-v3q"/>
+                            <constraint firstItem="v3G-6z-lKP" firstAttribute="centerX" secondItem="u7k-6T-UMh" secondAttribute="centerX" id="uPp-lT-0CQ"/>
                             <constraint firstItem="u7k-6T-UMh" firstAttribute="centerX" secondItem="m4Y-br-JCN" secondAttribute="centerX" id="wO7-tI-Fxd"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="sEL-uU-KdB"/>
                     <connections>
-                        <outlet property="gameBoardBtn1" destination="uVP-DS-YtK" id="6P9-9v-DtQ"/>
-                        <outlet property="gameBoardBtn2" destination="RPA-mA-wiv" id="ij7-ow-8Pt"/>
-                        <outlet property="gameBoardBtn3" destination="cfg-SR-DfY" id="7d6-JI-EzV"/>
-                        <outlet property="gameBoardBtn4" destination="ANi-3S-l85" id="Kwu-j3-cIi"/>
-                        <outlet property="gameBoardBtn5" destination="RqJ-l2-4ah" id="gHB-bt-gkq"/>
-                        <outlet property="gameBoardBtn6" destination="MET-Gh-AmJ" id="hBF-8m-54K"/>
-                        <outlet property="gameBoardBtn7" destination="yRz-8o-lR0" id="hQx-fH-3GU"/>
-                        <outlet property="gameBoardBtn8" destination="ESM-ch-ajc" id="TAO-LP-fx8"/>
-                        <outlet property="gameBoardBtn9" destination="EeZ-dK-m7f" id="XdJ-A6-54z"/>
-                        <outlet property="turnLabel" destination="h1H-zb-uzo" id="G9C-tP-sWn"/>
+                        <outlet property="turnImg" destination="v3G-6z-lKP" id="CP0-1g-cCW"/>
+                        <outletCollection property="gameBtns" destination="wcm-3Q-Alj" collectionClass="NSMutableArray" id="gwH-mV-U4i"/>
+                        <outletCollection property="gameBtns" destination="2KV-QW-wxq" collectionClass="NSMutableArray" id="BRl-6X-lST"/>
+                        <outletCollection property="gameBtns" destination="VWK-EZ-yaV" collectionClass="NSMutableArray" id="l5z-tf-JzB"/>
+                        <outletCollection property="gameBtns" destination="PGY-dC-9rj" collectionClass="NSMutableArray" id="xGm-wY-K4h"/>
+                        <outletCollection property="gameBtns" destination="d9M-Vd-I2w" collectionClass="NSMutableArray" id="5rz-3c-Mif"/>
+                        <outletCollection property="gameBtns" destination="tHG-UW-k5j" collectionClass="NSMutableArray" id="uhD-Vo-VOv"/>
+                        <outletCollection property="gameBtns" destination="reI-OI-98b" collectionClass="NSMutableArray" id="6Oy-LV-Gh0"/>
+                        <outletCollection property="gameBtns" destination="HPt-fk-hYp" collectionClass="NSMutableArray" id="eL5-ml-diQ"/>
+                        <outletCollection property="gameBtns" destination="d4T-Oe-U7M" collectionClass="NSMutableArray" id="hfK-Gv-RUm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eEC-Cd-MgC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
