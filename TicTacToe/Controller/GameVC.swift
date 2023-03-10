@@ -23,100 +23,66 @@ class GameVC: UIViewController {
     }
     
     func initBoard() {
-        board.append(gameBoardBtn1)
-        board.append(gameBoardBtn2)
-        board.append(gameBoardBtn3)
-        board.append(gameBoardBtn4)
-        board.append(gameBoardBtn5)
-        board.append(gameBoardBtn6)
-        board.append(gameBoardBtn7)
-        board.append(gameBoardBtn8)
-        board.append(gameBoardBtn9)
+        let startingPlayer = isPlayerOneTurn ? Player.One : Player.Two
+        let playerImage = startingPlayer.rawValue
+        turnImg.image = UIImage(named: playerImage)
     }
     
-    func isFullBoard() -> Bool {
-        for button in board {
-            if button.title(for: .normal) == nil {
-                return false
-            }
-        }
-        
-        return true
-    }
+    @IBAction func gameBtnTapped(_ sender: UIButton) {
+        let index = sender.tag - 1
+        var player = isPlayerOneTurn ? Player.One : Player.Two
+        var playerImage = player.rawValue
 
-    @IBAction func gameBoardBtnTapped(_ sender: UIButton) {
-        addMoveToBoard(sender)
+        if notValidMove(in: moves, for: index) { return }
         
-        if isWinningMove(playerOne) {
+        moves[index] = Move(player: player, boardIndex: index)
+        sender.setImage(UIImage(named: playerImage), for: .normal)
+        
+        if isWinningMove(for: .One, in: moves) {
             playerOneScore += 1
-            gameOverAlert(title: "Cross wins!")
+            gameOverAlert(title: "Player One wins!")
         }
         
-        if isWinningMove(playerTwo) {
+        if isWinningMove(for: .Two, in: moves) {
             playerTwoScore += 1
-            gameOverAlert(title: "Circle wins!")
+            gameOverAlert(title: "Player Two wins!")
         }
         
-        if isFullBoard() {
+        if isDrawGame() {
             gameOverAlert(title: "Draw")
         }
+        
+        isPlayerOneTurn.toggle()
+        player = isPlayerOneTurn ? Player.One : Player.Two
+        playerImage = player.rawValue
+        turnImg.image = UIImage(named: playerImage)
     }
     
-    func isWinningMove(_ s: String) -> Bool {
-        // horizontal wins
-        if isPlayerSymbol(gameBoardBtn1, s) && isPlayerSymbol(gameBoardBtn2, s) && isPlayerSymbol(gameBoardBtn3, s) {
-            return true
-        }
-        if isPlayerSymbol(gameBoardBtn4, s) && isPlayerSymbol(gameBoardBtn5, s) && isPlayerSymbol(gameBoardBtn6, s) {
-            return true
-        }
-        if isPlayerSymbol(gameBoardBtn7, s) && isPlayerSymbol(gameBoardBtn8, s) && isPlayerSymbol(gameBoardBtn9, s) {
-            return true
-        }
+    func notValidMove(in moves: [Move?], for index: Int) -> Bool {
+        return moves.contains(where: { $0?.boardIndex == index })
+    }
+    
+    func isWinningMove(for player: Player, in moves: [Move?]) -> Bool {
+        let horizPatterns = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+        let vertPatterns = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
+        let diagPatterns = [[0, 4, 8], [2, 4, 6]]
+        let winPatterns = horizPatterns + vertPatterns + diagPatterns
         
-        // vertical wins
-        if isPlayerSymbol(gameBoardBtn1, s) && isPlayerSymbol(gameBoardBtn4, s) && isPlayerSymbol(gameBoardBtn7, s) {
-            return true
-        }
-        if isPlayerSymbol(gameBoardBtn2, s) && isPlayerSymbol(gameBoardBtn5, s) && isPlayerSymbol(gameBoardBtn8, s) {
-            return true
-        }
-        if isPlayerSymbol(gameBoardBtn3, s) && isPlayerSymbol(gameBoardBtn6, s) && isPlayerSymbol(gameBoardBtn9, s) {
-            return true
-        }
+        let playerMoves = moves.compactMap { $0 }.filter { $0.player == player }
+        let playerPositions = Set(playerMoves.map { $0.boardIndex })
         
-        // diagonal wins
-        if isPlayerSymbol(gameBoardBtn1, s) && isPlayerSymbol(gameBoardBtn5, s) && isPlayerSymbol(gameBoardBtn9, s) {
-            return true
-        }
-        if isPlayerSymbol(gameBoardBtn3, s) && isPlayerSymbol(gameBoardBtn5, s) && isPlayerSymbol(gameBoardBtn7, s) {
-            return true
+        for pattern in winPatterns {
+            let patternSet = Set(pattern)
+            if patternSet.isSubset(of: playerPositions) {
+                return true
+            }
         }
         
         return false
     }
     
-    func isPlayerSymbol(_ button: UIButton, _ symbol: String) -> Bool {
-        return button.title(for: .normal) == symbol
-    }
-
-    // add player move to board
-    func addMoveToBoard(_ sender: UIButton) {
-        // "sender" is UIButton aka button in gameboard space
-        if sender.title(for: .normal) == nil {
-            // valid board space for player move
-            if playerTurn == "X" {
-                sender.setTitle("X", for: .normal)
-                playerTurn = "O"
-                turnLabel.text = "O"
-            } else {
-                sender.setTitle("O", for: .normal)
-                self.playerTurn = "X"
-                self.turnLabel.text = "X"
-            }
-            
-            sender.isEnabled = false
-        }
+    func isDrawGame() -> Bool {
+        return moves.compactMap { $0 }.count == 9
     }
     
     func gameOverAlert(title: String) {
@@ -125,17 +91,21 @@ class GameVC: UIViewController {
         alertController.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (_) in
             self.resetBoard()
         }))
-        self.present(alertController, animated: true)
+        present(alertController, animated: true)
     }
     
     func resetBoard() {
-        for button in board {
-            button.setTitle(nil, for: .normal)
-            button.isEnabled = true
+        
+        // clear moves and replace every index with nils
+        moves = Array(repeating: nil, count: 9)
+        
+        // clear every button from image and set isEnabled to true
+        for button in gameBtns {
+            button.setImage(nil, for: .normal)
         }
         
-        playerTurn = "X"
-        turnLabel.text = playerTurn
+        isPlayerOneTurn.toggle()
+        initBoard()
     }
 }
 
