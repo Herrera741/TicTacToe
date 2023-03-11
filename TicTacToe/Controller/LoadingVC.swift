@@ -8,10 +8,9 @@
 import UIKit
 
 class LoadingVC: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        self.view.backgroundColor = UIColor(named: "bgColor")
     }
     
     override func viewDidAppear(_ animated: Bool) {

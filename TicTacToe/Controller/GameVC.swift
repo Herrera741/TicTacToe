@@ -9,7 +9,10 @@ import UIKit
 
 class GameVC: UIViewController {
     
-    @IBOutlet weak var turnImg: UIImageView!
+    
+    @IBOutlet weak var turnLbl: UILabel!
+    @IBOutlet weak var turnImgView: UIImageView!
+    @IBOutlet weak var vertStackView: UIStackView!
     @IBOutlet var gameBtns: [UIButton]!
     
     var isPlayerOneTurn = true
@@ -24,14 +27,25 @@ class GameVC: UIViewController {
     
     func initBoard() {
         let startingPlayer = isPlayerOneTurn ? Player.One : Player.Two
-        let playerImage = startingPlayer.rawValue
-        turnImg.image = UIImage(named: playerImage)
+        
+        // set primary background color
+        self.view.backgroundColor = UIColor(named: "bgColor")
+        // set turn label color
+        turnLbl.textColor = UIColor(named: "onBgColor")
+        // set turn image view background and border colors
+        turnImgView.backgroundColor = UIColor(named: "bgColor")
+        turnImgView.image = UIImage(named: startingPlayer.rawValue)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
+        // set vertical stack background color
+        vertStackView.backgroundColor = UIColor(named: "overlayRed")
+        // set all buttons background color
+        for button in gameBtns {
+            button.backgroundColor = UIColor(named: "surfaceColor")
+        }
     }
     
     @IBAction func gameBtnTapped(_ sender: UIButton) {
         let index = sender.tag - 1
         var player = isPlayerOneTurn ? Player.One : Player.Two
-        var playerImage = player.rawValue
 
         if notValidMove(in: moves, for: index) { return }
         
