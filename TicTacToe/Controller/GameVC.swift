@@ -49,27 +49,27 @@ class GameVC: UIViewController {
 
         if notValidMove(in: moves, for: index) { return }
         
-        moves[index] = Move(player: player, boardIndex: index)
-        sender.setImage(UIImage(named: playerImage), for: .normal)
+        let move = Move(player: player, boardIndex: index)
+        moves[index] = move
+        sender.setImage(UIImage(named: move.indicator)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray, renderingMode: .alwaysOriginal), for: .normal)
         
-        if isWinningMove(for: .One, in: moves) {
-            playerOneScore += 1
-            gameOverAlert(title: "Player One wins!")
-        }
-        
-        if isWinningMove(for: .Two, in: moves) {
-            playerTwoScore += 1
-            gameOverAlert(title: "Player Two wins!")
-        }
-        
-        if isDrawGame() {
+        if isWinningMove(for: player, in: moves) {
+            let playerString = player == .One ? "One" : "Two"
+            
+            if playerString == "One" {
+                playerOneScore += 1
+            } else {
+                playerTwoScore += 1
+            }
+
+            gameOverAlert(title: "Player \(playerString) wins!")
+        } else if isDrawGame() {
             gameOverAlert(title: "Draw")
         }
         
         isPlayerOneTurn.toggle()
         player = isPlayerOneTurn ? Player.One : Player.Two
-        playerImage = player.rawValue
-        turnImg.image = UIImage(named: playerImage)
+        turnImgView.image = UIImage(named: player.rawValue)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
     }
     
     func notValidMove(in moves: [Move?], for index: Int) -> Bool {
@@ -124,7 +124,7 @@ class GameVC: UIViewController {
 }
 
 enum Player: String {
-    case One = "icXmark"
+    case One = "icCross"
     case Two = "icCircle"
 }
 
