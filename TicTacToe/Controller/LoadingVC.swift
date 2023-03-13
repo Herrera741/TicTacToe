@@ -15,17 +15,14 @@ class LoadingVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        delay(durationInSeconds: 2.0) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.showInitialView()
         }
     }
     
     private func showInitialView() {
         performSegue(withIdentifier: "showGame", sender: nil)
-    }
-    
-    private func delay(durationInSeconds seconds: Double, completion: @escaping () -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: completion)
     }
 }
 

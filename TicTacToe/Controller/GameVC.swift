@@ -15,9 +15,8 @@ class GameVC: UIViewController {
     @IBOutlet weak var vertStackView: UIStackView!
     @IBOutlet var gameBtns: [UIButton]!
     
-    var isPlayerOneTurn = true
-    var playerOneScore = 0
-    var playerTwoScore = 0
+    var humanScore = 0
+    var computerScore = 0
     var moves: [Move?] = Array(repeating: nil, count: 9)
 
     override func viewDidLoad() {
@@ -26,15 +25,13 @@ class GameVC: UIViewController {
     }
     
     func initBoard() {
-        let startingPlayer = isPlayerOneTurn ? Player.One : Player.Two
-        
         // set primary background color
         self.view.backgroundColor = UIColor(named: "bgColor")
         // set turn label color
         turnLbl.textColor = UIColor(named: "onBgColor")
         // set turn image view background and border colors
         turnImgView.backgroundColor = UIColor(named: "bgColor")
-        turnImgView.image = UIImage(named: startingPlayer.rawValue)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
+        turnImgView.image = UIImage(named: Player.Human.rawValue)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
         // set vertical stack background color
         vertStackView.backgroundColor = UIColor(named: "overlayRed")
         // set all buttons background color
@@ -44,32 +41,58 @@ class GameVC: UIViewController {
     }
     
     @IBAction func gameBtnTapped(_ sender: UIButton) {
+        // human makes their move...
         let index = sender.tag - 1
-        var player = isPlayerOneTurn ? Player.One : Player.Two
-
         if notValidMove(in: moves, for: index) { return }
-        
-        let move = Move(player: player, boardIndex: index)
-        moves[index] = move
-        sender.setImage(UIImage(named: move.indicator)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray, renderingMode: .alwaysOriginal), for: .normal)
-        
-        if isWinningMove(for: player, in: moves) {
-            let playerString = player == .One ? "One" : "Two"
-            
-            if playerString == "One" {
-                playerOneScore += 1
-            } else {
-                playerTwoScore += 1
-            }
+        moves[index] = Move(player: .Human, boardIndex: index)
 
-            gameOverAlert(title: "Player \(playerString) wins!")
-        } else if isDrawGame() {
-            gameOverAlert(title: "Draw")
+        var playerImage = getPlayerImage(for: moves[index])
+        sender.setImage(playerImage, for: .normal)
+        
+        if isWinningMove(for: .Human, in: moves) {
+            humanScore += 1
+            gameOverAlert(title: "Human wins!")
+            return
         }
         
-        isPlayerOneTurn.toggle()
-        player = isPlayerOneTurn ? Player.One : Player.Two
-        turnImgView.image = UIImage(named: player.rawValue)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
+        if isDrawGame(in: moves) {
+            gameOverAlert(title: "Draw!")
+            return
+        }
+
+        // computer makes their move...
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let index = self.determineComputerMovePosition(in: self.moves)
+            self.moves[index] = Move(player: .Computer, boardIndex: index)
+            
+            playerImage = self.getPlayerImage(for: self.moves[index])
+            self.gameBtns[index].setImage(playerImage, for: .normal)
+            
+            if self.isWinningMove(for: .Computer, in: self.moves) {
+                self.computerScore += 1
+                self.gameOverAlert(title: "Computer wins!")
+                return
+            }
+            
+            if self.isDrawGame(in: self.moves) {
+                self.gameOverAlert(title: "Draw!")
+                return
+            }
+        }
+    }
+    
+    func getPlayerImage(for move: Move?) -> UIImage {
+        return UIImage(named: move?.indicator ?? "")!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
+    }
+
+    func determineComputerMovePosition(in moves: [Move?]) -> Int {
+        let openMoveIndices = moves.indices.filter { moves[$0] == nil }
+        return openMoveIndices.randomElement()!
+    }
+    
+    func setupNextGame() {
+        let playerImage = UIImage(named: Player.Human.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
+        turnImgView.image = playerImage
     }
     
     func notValidMove(in moves: [Move?], for index: Int) -> Bool {
@@ -95,37 +118,34 @@ class GameVC: UIViewController {
         return false
     }
     
-    func isDrawGame() -> Bool {
+    func isDrawGame(in moves: [Move?]) -> Bool {
         return moves.compactMap { $0 }.count == 9
     }
     
     func gameOverAlert(title: String) {
-        let message = "\nCircle \(playerTwoScore) \n\nCross \(playerOneScore)"
+        let message = "\nCross \(humanScore) \n\nCircle \(computerScore)"
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (_) in
             self.resetBoard()
         }))
         present(alertController, animated: true)
+        setupNextGame()
     }
     
     func resetBoard() {
-        
-        // clear moves and replace every index with nils
         moves = Array(repeating: nil, count: 9)
-        
-        // clear every button from image and set isEnabled to true
+
         for button in gameBtns {
             button.setImage(nil, for: .normal)
         }
-        
-        isPlayerOneTurn.toggle()
+
         initBoard()
     }
 }
 
 enum Player: String {
-    case One = "icCross"
-    case Two = "icCircle"
+    case Human = "icCross"
+    case Computer = "icCircle"
 }
 
 struct Move {
