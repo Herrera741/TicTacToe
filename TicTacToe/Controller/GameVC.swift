@@ -18,6 +18,7 @@ class GameVC: UIViewController {
     var humanScore = 0
     var computerScore = 0
     var moves: [Move?] = Array(repeating: nil, count: 9)
+    var playerImage = UIImage()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,8 +46,7 @@ class GameVC: UIViewController {
         let index = sender.tag - 1
         if notValidMove(in: moves, for: index) { return }
         moves[index] = Move(player: .Human, boardIndex: index)
-
-        var playerImage = getPlayerImage(for: moves[index])
+        playerImage = getPlayerImage(for: .Human)
         sender.setImage(playerImage, for: .normal)
         
         if isWinningMove(for: .Human, in: moves) {
@@ -61,12 +61,12 @@ class GameVC: UIViewController {
         }
 
         // computer makes their move...
+        playerImage = getPlayerImage(for: .Computer)
+        turnImgView.image = playerImage
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let index = self.determineComputerMovePosition(in: self.moves)
             self.moves[index] = Move(player: .Computer, boardIndex: index)
-            
-            playerImage = self.getPlayerImage(for: self.moves[index])
-            self.gameBtns[index].setImage(playerImage, for: .normal)
+            self.gameBtns[index].setImage(self.playerImage, for: .normal)
             
             if self.isWinningMove(for: .Computer, in: self.moves) {
                 self.computerScore += 1
@@ -78,11 +78,14 @@ class GameVC: UIViewController {
                 self.gameOverAlert(title: "Draw!")
                 return
             }
+            
+            self.playerImage = self.getPlayerImage(for: .Human)
+            self.turnImgView.image = self.playerImage
         }
     }
     
-    func getPlayerImage(for move: Move?) -> UIImage {
-        return UIImage(named: move?.indicator ?? "")!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
+    func getPlayerImage(for player: Player) -> UIImage {
+        return UIImage(named: player.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
     }
 
     func determineComputerMovePosition(in moves: [Move?]) -> Int {
@@ -151,9 +154,5 @@ enum Player: String {
 struct Move {
     let player: Player
     let boardIndex: Int
-    
-    var indicator: String {
-        return player.rawValue
-    }
 }
 
