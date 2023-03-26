@@ -7,40 +7,89 @@
 
 import UIKit
 
-class GameVC: UIViewController {
+// MARK: game enums
+enum Player: String {
+    case Human = "icCross"
+    case Computer = "icCircle"
+}
+
+struct Move {
+    let player: Player
+    let boardIndex: Int
+}
+
+class GameVC: UIViewController, MenuSheetDelegate {
     
-    
+    // MARK: iboutlets
     @IBOutlet weak var turnLbl: UILabel!
     @IBOutlet weak var turnImgView: UIImageView!
     @IBOutlet weak var vertStackView: UIStackView!
     @IBOutlet var gameBtns: [UIButton]!
     
+    // MARK: game variables
     var humanScore = 0
     var computerScore = 0
+    var scores = [0, 0]
     var moves: [Move?] = Array(repeating: nil, count: 9)
     var playerImage = UIImage()
 
+    // MARK: initial UI setup
     override func viewDidLoad() {
         super.viewDidLoad()
         initBoard()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showMenu(winner: "", scores: self.scores)
+    }
+    
+    // MARK: initial board setup
     func initBoard() {
-        // set primary background color
         self.view.backgroundColor = UIColor(named: "bgColor")
-        // set turn label color
         turnLbl.textColor = UIColor(named: "onBgColor")
-        // set turn image view background and border colors
         turnImgView.backgroundColor = UIColor(named: "bgColor")
         turnImgView.image = UIImage(named: Player.Human.rawValue)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
-        // set vertical stack background color
         vertStackView.backgroundColor = UIColor(named: "overlayRed")
-        // set all buttons background color
+
         for button in gameBtns {
             button.backgroundColor = UIColor(named: "surfaceColor")
         }
     }
     
+    func resetBoard() {
+        moves = Array(repeating: nil, count: 9)
+
+        for button in gameBtns {
+            button.setImage(nil, for: .normal)
+        }
+
+        initBoard()
+    }
+    
+    func setupNextGame() {
+        let playerImage = UIImage(named: Player.Human.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
+        turnImgView.image = playerImage
+    }
+    
+    func showMenu(winner: String, scores: [Int]) {
+        let menuVC = MenuSheetVC(winner: winner, scores: scores)
+        menuVC.delegate = self
+        if let sheet = menuVC.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.prefersGrabberVisible = true
+        }
+        
+        present(menuVC, animated: true, completion: nil)
+    }
+    
+    // MARK: delegate protocol communication
+    func didTapPlayButton(singleMode: Bool, level: Int) {
+        self.resetBoard()
+        self.setupNextGame()
+    }
+    
+    // MARK: ibactions
     @IBAction func gameBtnTapped(_ sender: UIButton) {
         // human makes their move...
         let index = sender.tag - 1
@@ -50,13 +99,13 @@ class GameVC: UIViewController {
         sender.setImage(playerImage, for: .normal)
         
         if isWinningMove(for: .Human, in: moves) {
-            humanScore += 1
-            gameOverAlert(title: "Human wins!")
+            self.scores[0] += 1
+            self.showMenu(winner: "Human", scores: self.scores)
             return
         }
         
         if isDrawGame(in: moves) {
-            gameOverAlert(title: "Draw!")
+            self.showMenu(winner: "Draw", scores: self.scores)
             return
         }
 
@@ -69,13 +118,13 @@ class GameVC: UIViewController {
             self.gameBtns[index].setImage(self.playerImage, for: .normal)
             
             if self.isWinningMove(for: .Computer, in: self.moves) {
-                self.computerScore += 1
-                self.gameOverAlert(title: "Computer wins!")
+                self.scores[1] += 1
+                self.showMenu(winner: "AI", scores: self.scores)
                 return
             }
             
             if self.isDrawGame(in: self.moves) {
-                self.gameOverAlert(title: "Draw!")
+                self.showMenu(winner: "Draw", scores: self.scores)
                 return
             }
             
@@ -84,24 +133,21 @@ class GameVC: UIViewController {
         }
     }
     
+    // MARK: game methods
     func getPlayerImage(for player: Player) -> UIImage {
         return UIImage(named: player.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
     }
-
+    
     func determineComputerMovePosition(in moves: [Move?]) -> Int {
         let openMoveIndices = moves.indices.filter { moves[$0] == nil }
         return openMoveIndices.randomElement()!
-    }
-    
-    func setupNextGame() {
-        let playerImage = UIImage(named: Player.Human.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
-        turnImgView.image = playerImage
     }
     
     func notValidMove(in moves: [Move?], for index: Int) -> Bool {
         return moves.contains(where: { $0?.boardIndex == index })
     }
     
+    // MARK: game state methods
     func isWinningMove(for player: Player, in moves: [Move?]) -> Bool {
         let horizPatterns = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
         let vertPatterns = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
@@ -124,35 +170,5 @@ class GameVC: UIViewController {
     func isDrawGame(in moves: [Move?]) -> Bool {
         return moves.compactMap { $0 }.count == 9
     }
-    
-    func gameOverAlert(title: String) {
-        let message = "\nCross \(humanScore) \n\nCircle \(computerScore)"
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-        alertController.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (_) in
-            self.resetBoard()
-        }))
-        present(alertController, animated: true)
-        setupNextGame()
-    }
-    
-    func resetBoard() {
-        moves = Array(repeating: nil, count: 9)
-
-        for button in gameBtns {
-            button.setImage(nil, for: .normal)
-        }
-
-        initBoard()
-    }
-}
-
-enum Player: String {
-    case Human = "icCross"
-    case Computer = "icCircle"
-}
-
-struct Move {
-    let player: Player
-    let boardIndex: Int
 }
 
