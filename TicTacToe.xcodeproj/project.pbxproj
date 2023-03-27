@@ -43,6 +43,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B4CB4EDF29D0690700B4183D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B4CB4EDB29CD8BE500B4183D /* MenuLabel.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B4DBB1FF29B5814600CE4BC0 = {
 			isa = PBXGroup;
 			children = (
@@ -62,11 +70,11 @@
 		B4DBB20A29B5814600CE4BC0 /* TicTacToe */ = {
 			isa = PBXGroup;
 			children = (
+				B4CB4EDF29D0690700B4183D /* View */,
 				B4DBB21F29B582B000CE4BC0 /* Controller */,
 				B4DBB20B29B5814600CE4BC0 /* AppDelegate.swift */,
 				B4DBB20D29B5814600CE4BC0 /* SceneDelegate.swift */,
 				B4DBB21129B5814600CE4BC0 /* Main.storyboard */,
-				B4CB4EDB29CD8BE500B4183D /* MenuLabel.swift */,
 				B4DBB21429B5814A00CE4BC0 /* Assets.xcassets */,
 				B4DBB21629B5814A00CE4BC0 /* LaunchScreen.storyboard */,
 				B4DBB21929B5814A00CE4BC0 /* Info.plist */,

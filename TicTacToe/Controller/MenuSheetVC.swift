@@ -38,6 +38,13 @@ class MenuSheetVC: UIViewController {
         super.viewDidAppear(animated)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if isBeingDismissed {
+            delegate?.didTapPlayButton(singleMode: isSinglePlayer, level: skillLevel)
+        }
+    }
+    
     init(winner: String, scores: [Int]) {
         self.winner = winner
         self.scores = scores
@@ -50,7 +57,11 @@ class MenuSheetVC: UIViewController {
     
     func setupUI() {
         configTitleLabel()
-        configLabelsSV()
+        
+        if !winner.isEmpty {
+            configLabelsSV()
+        }
+        
         configModesSV()
         configSkillLevelsSV()
         configButton()
@@ -60,13 +71,25 @@ class MenuSheetVC: UIViewController {
     func configTitleLabel() {
         view.addSubview(titleLabel)
         
-        titleLabel.text = "\(winner) Wins!"
+        titleLabel.text = getTitleLabelText(title: winner)
         titleLabel.textColor = .white
         titleLabel.font = .systemFont(ofSize: 28, weight: .heavy)
         titleLabel.textAlignment = .center
-        titleLabel.isHidden = winner == "" ? true : false
         
         setTitleLabelConstraints()
+    }
+    
+    func getTitleLabelText(title: String) -> String {
+        switch title {
+        case "You":
+            return "\(title) Win!"
+        case "AI":
+            return "\(title) Wins!"
+        case "Draw":
+            return "It's a \(title)"
+        default:
+            return "Tic Tac Toe"
+        }
     }
     
     func setTitleLabelConstraints() {
@@ -147,8 +170,8 @@ class MenuSheetVC: UIViewController {
     
     func setModesSVConstraints() {
         modesSV.translatesAutoresizingMaskIntoConstraints = false
-        modesSV.topAnchor.constraint(equalTo: labelsSV.bottomAnchor, constant: 25).isActive = true
-        modesSV.centerXAnchor.constraint(equalTo: labelsSV.centerXAnchor).isActive = true
+        modesSV.topAnchor.constraint(equalTo: winner.isEmpty ? titleLabel.bottomAnchor : labelsSV.bottomAnchor, constant: winner.isEmpty ? CGFloat(50) : CGFloat(25)).isActive = true
+        modesSV.centerXAnchor.constraint(equalTo: winner.isEmpty ? titleLabel.centerXAnchor : labelsSV.centerXAnchor).isActive = true
     }
     
     // MARK: skill levels ui
@@ -199,7 +222,7 @@ class MenuSheetVC: UIViewController {
     func configButton() {
         view.addSubview(playButton)
         
-        playButton.setTitle(winner == "" ? "Play Game" : "Play Again", for: .normal)
+        playButton.setTitle(winner == "" ? "Play" : "Play Again", for: .normal)
         playButton.setTitleColor(.white, for: .normal)
         playButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         playButton.configuration = .filled()

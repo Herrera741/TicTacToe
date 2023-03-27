@@ -27,8 +27,6 @@ class GameVC: UIViewController, MenuSheetDelegate {
     @IBOutlet var gameBtns: [UIButton]!
     
     // MARK: game variables
-    var humanScore = 0
-    var computerScore = 0
     var scores = [0, 0]
     var moves: [Move?] = Array(repeating: nil, count: 9)
     var playerImage = UIImage()
@@ -100,7 +98,7 @@ class GameVC: UIViewController, MenuSheetDelegate {
         
         if isWinningMove(for: .Human, in: moves) {
             self.scores[0] += 1
-            self.showMenu(winner: "Human", scores: self.scores)
+            self.showMenu(winner: "You", scores: self.scores)
             return
         }
         
@@ -112,7 +110,7 @@ class GameVC: UIViewController, MenuSheetDelegate {
         // computer makes their move...
         playerImage = getPlayerImage(for: .Computer)
         turnImgView.image = playerImage
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             let index = self.determineComputerMovePosition(in: self.moves)
             self.moves[index] = Move(player: .Computer, boardIndex: index)
             self.gameBtns[index].setImage(self.playerImage, for: .normal)
