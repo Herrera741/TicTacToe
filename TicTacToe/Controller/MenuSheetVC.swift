@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MenuSheetDelegate {
-    func didTapPlayButton(singleMode: Bool, level: Int)
+    func didTapPlayButton(isSinglePlayer: Bool, level: Int)
 }
 
 class MenuSheetVC: UIViewController {
@@ -24,8 +24,8 @@ class MenuSheetVC: UIViewController {
     var winner = ""
     var scores = [0, 0]
     var players = ["Human", "AI"]
-    var isSinglePlayer = true
-    var skillLevel = 0
+    var singlePlayerMode = true
+    var skillLevel = 1
     var delegate: MenuSheetDelegate?
     
     override func viewDidLoad() {
@@ -41,7 +41,7 @@ class MenuSheetVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if isBeingDismissed {
-            delegate?.didTapPlayButton(singleMode: isSinglePlayer, level: skillLevel)
+            delegate?.didTapPlayButton(isSinglePlayer: singlePlayerMode, level: skillLevel)
         }
     }
     
@@ -153,7 +153,7 @@ class MenuSheetVC: UIViewController {
             items: [UIImage(systemName: "person.fill") ?? "",
                     UIImage(systemName: "person.2.fill") ?? ""])
         modeControl.addTarget(self, action: #selector(modeDidChange), for: .valueChanged)
-        modeControl.selectedSegmentIndex = isSinglePlayer ? 0 : 1
+        modeControl.selectedSegmentIndex = singlePlayerMode ? 0 : 1
         modeControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
         modeControl.selectedSegmentTintColor = .systemTeal
         modeControl.backgroundColor = .systemGray
@@ -165,7 +165,7 @@ class MenuSheetVC: UIViewController {
     }
     
     @objc func modeDidChange(_ segmentedControl: UISegmentedControl) {
-        isSinglePlayer.toggle()
+        singlePlayerMode.toggle()
     }
     
     func setModesSVConstraints() {
@@ -209,7 +209,7 @@ class MenuSheetVC: UIViewController {
     }
     
     @objc func skillDidChange(_ segmentedControl: UISegmentedControl) {
-        skillLevel = segmentedControl.selectedSegmentIndex
+        skillLevel = segmentedControl.selectedSegmentIndex + 1
     }
     
     func setSkillLevelsSVConstraints() {
@@ -232,7 +232,7 @@ class MenuSheetVC: UIViewController {
     }
     
     @objc func playButtonTapped() {
-        delegate?.didTapPlayButton(singleMode: isSinglePlayer, level: skillLevel)
+        delegate?.didTapPlayButton(isSinglePlayer: singlePlayerMode, level: skillLevel)
         dismiss(animated: true)
     }
     
