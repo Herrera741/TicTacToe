@@ -21,11 +21,11 @@ class MenuSheetVC: UIViewController {
     var playButton = UIButton()
     
     // MARK: game variables
-    var winner = ""
-    var scores = [0, 0]
+    var winner: String
+    var scores: [Int]
     var players = ["Human", "AI"]
     var singlePlayerMode = true
-    var skillLevel = 1
+    var skillLevel: Int
     var delegate: MenuSheetDelegate?
     
     override func viewDidLoad() {
@@ -45,9 +45,10 @@ class MenuSheetVC: UIViewController {
         }
     }
     
-    init(winner: String, scores: [Int]) {
+    init(winner: String, scores: [Int], skillLevel: Int) {
         self.winner = winner
         self.scores = scores
+        self.skillLevel = skillLevel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -86,7 +87,7 @@ class MenuSheetVC: UIViewController {
         case "AI":
             return "\(title) Wins!"
         case "Draw":
-            return "It's a \(title)"
+            return "It's a \(title)!"
         default:
             return "Tic Tac Toe"
         }
@@ -94,7 +95,7 @@ class MenuSheetVC: UIViewController {
     
     func setTitleLabelConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: winner.isEmpty ? 80 : 50).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
 
@@ -198,7 +199,7 @@ class MenuSheetVC: UIViewController {
         let modeControl = UISegmentedControl(items: ["Easy", "Medium", "Hard"])
         modeControl.addTarget(self, action: #selector(skillDidChange), for: .valueChanged)
         modeControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        modeControl.selectedSegmentIndex = 0
+        modeControl.selectedSegmentIndex = skillLevel - 1
         modeControl.selectedSegmentTintColor = .systemTeal
         modeControl.backgroundColor = .systemGray
         modeControl.translatesAutoresizingMaskIntoConstraints = false

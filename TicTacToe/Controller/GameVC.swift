@@ -29,7 +29,6 @@ class GameVC: UIViewController, MenuSheetDelegate {
     // MARK: game variables
     var scores = [0, 0]
     var moves: [Move?] = Array(repeating: nil, count: 9)
-    var playerImage = UIImage()
     var isSinglePlayer = false
     var skillLevel = 1
     
@@ -67,13 +66,13 @@ class GameVC: UIViewController, MenuSheetDelegate {
         initBoard()
     }
     
-    func setupNextGame() {
-        let playerImage = UIImage(named: Player.Human.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
-        turnImgView.image = playerImage
+    func setupFirstTurnImage() {
+        let startingPlayerPiece = UIImage(named: Player.Human.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
+        turnImgView.image = startingPlayerPiece
     }
     
     func showMenu(winner: String, scores: [Int]) {
-        let menuVC = MenuSheetVC(winner: winner, scores: scores)
+        let menuVC = MenuSheetVC(winner: winner, scores: scores, skillLevel: skillLevel)
         menuVC.delegate = self
         if let sheet = menuVC.sheetPresentationController {
             sheet.detents = [.medium()]
@@ -86,19 +85,20 @@ class GameVC: UIViewController, MenuSheetDelegate {
     // MARK: delegate protocol communication
     func didTapPlayButton(isSinglePlayer: Bool, level: Int) {
         self.resetBoard()
-        self.setupNextGame()
+        self.setupFirstTurnImage()
         self.isSinglePlayer = isSinglePlayer
         self.skillLevel = level
     }
     
-    // MARK: ibactions
+    // MARK: ibaction for game buttons
     @IBAction func gameBtnTapped(_ sender: UIButton) {
         // human makes their move...
         let index = sender.tag - 1
-        if notValidMove(in: moves, for: index) { return }
+        if isNotValidMove(in: moves, for: index) { return }
+        
         moves[index] = Move(player: .Human, boardIndex: index)
-        playerImage = getPlayerImage(for: .Human)
-        sender.setImage(playerImage, for: .normal)
+        let humanImage = getPlayerImage(for: .Human)
+        sender.setImage(humanImage, for: .normal)
         
         if isWinningMove(for: .Human, in: moves) {
             self.scores[0] += 1
@@ -112,14 +112,14 @@ class GameVC: UIViewController, MenuSheetDelegate {
         }
         
         // computer makes their move...
-        playerImage = getPlayerImage(for: .Computer)
-        turnImgView.image = playerImage
+        let computerImage = getPlayerImage(for: .Computer)
+        turnImgView.image = computerImage
         
-        let delay = self.skillLevel == 1 ? 0.2 : 1
+        let delay = 0.3
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            let index = self.determineComputerMove(in: self.moves)
+            let index = self.determineComputerPosition(in: self.moves)
             self.moves[index] = Move(player: .Computer, boardIndex: index)
-            self.gameBtns[index].setImage(self.playerImage, for: .normal)
+            self.gameBtns[index].setImage(computerImage, for: .normal)
             
             if self.isWinningMove(for: .Computer, in: self.moves) {
                 self.scores[1] += 1
@@ -132,26 +132,35 @@ class GameVC: UIViewController, MenuSheetDelegate {
                 return
             }
             
-            self.playerImage = self.getPlayerImage(for: .Human)
-            self.turnImgView.image = self.playerImage
+            self.turnImgView.image = self.getPlayerImage(for: .Human)
         }
     }
     
-    // MARK: game methods
+    // MARK: getter methods
     func getPlayerImage(for player: Player) -> UIImage {
         return UIImage(named: player.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
     }
     
-    func notValidMove(in moves: [Move?], for index: Int) -> Bool {
-        return moves.contains(where: { $0?.boardIndex == index })
+    func getOpenPositions(in moves: [Move?]) -> [Int] {
+        moves.indices.filter { moves[$0] == nil }
     }
     
-    // MARK: game state methods
-    func getWinPatterns() -> [[Int]] {
-        let horizPatterns = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
-        let vertPatterns = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
-        let diagPatterns = [[0, 4, 8], [2, 4, 6]]
-        return horizPatterns + vertPatterns + diagPatterns
+    func getWinPatterns() -> Set<Set<Int>> {
+        let winPatterns: Set<Set<Int>> = [[0, 1, 2], [3, 4, 5], [6, 7, 8],
+                                          [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                                          [0, 4, 8], [2, 4, 6]]
+        
+        return winPatterns
+    }
+
+    func getRandomPosition(in moves: [Move?]) -> Int {
+        let openPositions = getOpenPositions(in: moves)
+        return openPositions.randomElement()!
+    }
+    
+    // MARK: game methods
+    func isNotValidMove(in moves: [Move?], for index: Int) -> Bool {
+        return moves.contains(where: { $0?.boardIndex == index })
     }
     
     func isWinningMove(for player: Player, in moves: [Move?]) -> Bool {
@@ -161,8 +170,7 @@ class GameVC: UIViewController, MenuSheetDelegate {
         let playerPositions = Set(playerMoves.map { $0.boardIndex })
         
         for pattern in winPatterns {
-            let patternSet = Set(pattern)
-            if patternSet.isSubset(of: playerPositions) {
+            if pattern.isSubset(of: playerPositions) {
                 return true
             }
         }
@@ -173,108 +181,63 @@ class GameVC: UIViewController, MenuSheetDelegate {
     func isDraw(in moves: [Move?]) -> Bool {
         return moves.compactMap { $0 }.count == 9
     }
-    
-    func getOpenMoves(in moves: [Move?]) -> [Int] {
-        var indices = [Int]()
-        let numberOfMoves = moves.count
-        for idx in 0..<numberOfMoves {
-            if moves[idx] == nil {
-                indices.append(idx)
-            }
-        }
-        
-        return indices
+
+    func isOpenPosition(in moves: [Move?], for index: Int) -> Bool {
+        return moves[index] == nil
     }
     
-    func determineComputerMove(in moves: [Move?]) -> Int {
-        if skillLevel == 3 { return findBestMove(in: moves) }
+    func determineComputerPosition(in moves: [Move?]) -> Int {
+        if skillLevel == 3 { return findBestPosition(in: moves) }
         
-        if skillLevel == 2 { return findModerateMove(in: moves) }
+        if skillLevel == 2 { return findModeratePosition(in: moves) }
         
         // skillLevel = 1
-        return getRandomMove(in: moves)
+        return getRandomPosition(in: moves)
     }
     
-    func findBestMove(in moves: [Move?]) -> Int {
-        let winMove = findWinningMove(for: .Computer, in: moves)
-        if winMove != -1 { return winMove }
+    func findBestPosition(in moves: [Move?]) -> Int {
+        let winPosition = findWinPosition(for: .Computer, in: moves)
+        if winPosition != -1 { return winPosition }
         
-        let blockMove = findBlockingMove(in: moves)
-        if blockMove != -1 { return blockMove }
+        let blockPosition = findBlockPosition(in: moves)
+        if blockPosition != -1 { return blockPosition }
         
-        return getRandomMove(in: moves)
+        return getRandomPosition(in: moves)
     }
     
-    func findModerateMove(in moves: [Move?]) -> Int {
-        let winMove = findWinningMove(for: .Computer, in: moves)
-        let blockMove = findBlockingMove(in: moves)
+    func findModeratePosition(in moves: [Move?]) -> Int {
+        let winPosition = findWinPosition(for: .Computer, in: moves)
+        let blockPosition = findBlockPosition(in: moves)
         
-        if winMove != -1 && blockMove != -1 {
-            let choices = [winMove, blockMove]
-            return choices.randomElement()!
+        if winPosition != -1 && blockPosition != -1 {
+            let positions = [winPosition, blockPosition]
+            return positions.randomElement()!
         }
         
-        return winMove != -1 ? winMove : blockMove != -1 ? blockMove : getRandomMove(in: moves)
+        return winPosition != -1 ? winPosition : blockPosition != -1 ? blockPosition : getRandomPosition(in: moves)
     }
     
-    func getRandomMove(in moves: [Move?]) -> Int {
-        let openMoveIndices = moves.indices.filter { moves[$0] == nil }
-        return openMoveIndices.randomElement()!
-    }
-    
-    func findWinningMove(for player: Player, in moves: [Move?]) -> Int {
+    func findWinPosition(for player: Player, in moves: [Move?]) -> Int {
         let winPatterns = getWinPatterns()
-        let openMoves = getOpenMoves(in: moves)
+        let playerMoves = moves.compactMap { $0 }.filter { $0.player == player }
+        let playerPositions = Set(playerMoves.map { $0.boardIndex })
         
-        for openMove in openMoves {
-            for pattern in winPatterns {
-                let closedMoves = pattern.filter { idx in
-                    return idx != openMove
-                }
-                
-                if closedMoves.count == 2 {
-                    var lineMoveCount = 0
-                    for move in closedMoves {
-                        if moves[move]?.player == player {
-                            lineMoveCount += 1
-                        }
-                        
-                        if lineMoveCount == 2 { return openMove }
-                    }
-                }
+        for pattern in winPatterns {
+            let winPositions = pattern.subtracting(playerPositions)
+            
+            if winPositions.count == 1 {
+                if isOpenPosition(in: moves, for: winPositions.first!) { return winPositions.first! }
             }
         }
-        
+
         return -1
     }
     
-    func findBlockingMove(in moves: [Move?]) -> Int {
-        let oppWinMove = findWinningMove(for: .Human, in: moves)
+    func findBlockPosition(in moves: [Move?]) -> Int {
+        let oppWinMove = findWinPosition(for: .Human, in: moves)
         if oppWinMove != -1 { return oppWinMove }
         let centerMove = 4
         if moves[centerMove] == nil { return centerMove }
-        
-        let winPatterns = getWinPatterns()
-        let openMoves = getOpenMoves(in: moves)
-        
-        for openMove in openMoves {
-            for pattern in winPatterns {
-                let closedMoves = pattern.filter { idx in
-                    return idx != openMove
-                }
-
-                if closedMoves.count == 1 {
-                    let closedMove = closedMoves[0]
-                    if moves[closedMove]?.player == .Human {
-                        let openLineMoves = pattern.filter { idx in
-                            return idx != closedMove
-                        }
-                        
-                        return openLineMoves.randomElement()!
-                    }
-                }
-            }
-        }
         
         return -1
     }
