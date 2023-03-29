@@ -30,7 +30,9 @@ class GameVC: UIViewController, MenuSheetDelegate {
     var scores = [0, 0]
     var moves: [Move?] = Array(repeating: nil, count: 9)
     var playerImage = UIImage()
-
+    var isSinglePlayer = false
+    var skillLevel = 1
+    
     // MARK: initial UI setup
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +51,7 @@ class GameVC: UIViewController, MenuSheetDelegate {
         turnImgView.backgroundColor = UIColor(named: "bgColor")
         turnImgView.image = UIImage(named: Player.Human.rawValue)?.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
         vertStackView.backgroundColor = UIColor(named: "overlayRed")
-
+        
         for button in gameBtns {
             button.backgroundColor = UIColor(named: "surfaceColor")
         }
@@ -57,11 +59,11 @@ class GameVC: UIViewController, MenuSheetDelegate {
     
     func resetBoard() {
         moves = Array(repeating: nil, count: 9)
-
+        
         for button in gameBtns {
             button.setImage(nil, for: .normal)
         }
-
+        
         initBoard()
     }
     
@@ -82,9 +84,11 @@ class GameVC: UIViewController, MenuSheetDelegate {
     }
     
     // MARK: delegate protocol communication
-    func didTapPlayButton(singleMode: Bool, level: Int) {
+    func didTapPlayButton(isSinglePlayer: Bool, level: Int) {
         self.resetBoard()
         self.setupNextGame()
+        self.isSinglePlayer = isSinglePlayer
+        self.skillLevel = level
     }
     
     // MARK: ibactions
@@ -102,16 +106,18 @@ class GameVC: UIViewController, MenuSheetDelegate {
             return
         }
         
-        if isDrawGame(in: moves) {
+        if isDraw(in: moves) {
             self.showMenu(winner: "Draw", scores: self.scores)
             return
         }
-
+        
         // computer makes their move...
         playerImage = getPlayerImage(for: .Computer)
         turnImgView.image = playerImage
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let index = self.determineComputerMovePosition(in: self.moves)
+        
+        let delay = self.skillLevel == 1 ? 0.2 : 1
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            let index = self.determineComputerMove(in: self.moves)
             self.moves[index] = Move(player: .Computer, boardIndex: index)
             self.gameBtns[index].setImage(self.playerImage, for: .normal)
             
@@ -121,7 +127,7 @@ class GameVC: UIViewController, MenuSheetDelegate {
                 return
             }
             
-            if self.isDrawGame(in: self.moves) {
+            if self.isDraw(in: self.moves) {
                 self.showMenu(winner: "Draw", scores: self.scores)
                 return
             }
@@ -136,21 +142,20 @@ class GameVC: UIViewController, MenuSheetDelegate {
         return UIImage(named: player.rawValue)!.withTintColor(UIColor(named: "secondaryColor") ?? .lightGray)
     }
     
-    func determineComputerMovePosition(in moves: [Move?]) -> Int {
-        let openMoveIndices = moves.indices.filter { moves[$0] == nil }
-        return openMoveIndices.randomElement()!
-    }
-    
     func notValidMove(in moves: [Move?], for index: Int) -> Bool {
         return moves.contains(where: { $0?.boardIndex == index })
     }
     
     // MARK: game state methods
-    func isWinningMove(for player: Player, in moves: [Move?]) -> Bool {
+    func getWinPatterns() -> [[Int]] {
         let horizPatterns = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
         let vertPatterns = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
         let diagPatterns = [[0, 4, 8], [2, 4, 6]]
-        let winPatterns = horizPatterns + vertPatterns + diagPatterns
+        return horizPatterns + vertPatterns + diagPatterns
+    }
+    
+    func isWinningMove(for player: Player, in moves: [Move?]) -> Bool {
+        let winPatterns = getWinPatterns()
         
         let playerMoves = moves.compactMap { $0 }.filter { $0.player == player }
         let playerPositions = Set(playerMoves.map { $0.boardIndex })
@@ -164,9 +169,114 @@ class GameVC: UIViewController, MenuSheetDelegate {
         
         return false
     }
-    
-    func isDrawGame(in moves: [Move?]) -> Bool {
+
+    func isDraw(in moves: [Move?]) -> Bool {
         return moves.compactMap { $0 }.count == 9
+    }
+    
+    func getOpenMoves(in moves: [Move?]) -> [Int] {
+        var indices = [Int]()
+        let numberOfMoves = moves.count
+        for idx in 0..<numberOfMoves {
+            if moves[idx] == nil {
+                indices.append(idx)
+            }
+        }
+        
+        return indices
+    }
+    
+    func determineComputerMove(in moves: [Move?]) -> Int {
+        if skillLevel == 3 { return findBestMove(in: moves) }
+        
+        if skillLevel == 2 { return findModerateMove(in: moves) }
+        
+        // skillLevel = 1
+        return getRandomMove(in: moves)
+    }
+    
+    func findBestMove(in moves: [Move?]) -> Int {
+        let winMove = findWinningMove(for: .Computer, in: moves)
+        if winMove != -1 { return winMove }
+        
+        let blockMove = findBlockingMove(in: moves)
+        if blockMove != -1 { return blockMove }
+        
+        return getRandomMove(in: moves)
+    }
+    
+    func findModerateMove(in moves: [Move?]) -> Int {
+        let winMove = findWinningMove(for: .Computer, in: moves)
+        let blockMove = findBlockingMove(in: moves)
+        
+        if winMove != -1 && blockMove != -1 {
+            let choices = [winMove, blockMove]
+            return choices.randomElement()!
+        }
+        
+        return winMove != -1 ? winMove : blockMove != -1 ? blockMove : getRandomMove(in: moves)
+    }
+    
+    func getRandomMove(in moves: [Move?]) -> Int {
+        let openMoveIndices = moves.indices.filter { moves[$0] == nil }
+        return openMoveIndices.randomElement()!
+    }
+    
+    func findWinningMove(for player: Player, in moves: [Move?]) -> Int {
+        let winPatterns = getWinPatterns()
+        let openMoves = getOpenMoves(in: moves)
+        
+        for openMove in openMoves {
+            for pattern in winPatterns {
+                let closedMoves = pattern.filter { idx in
+                    return idx != openMove
+                }
+                
+                if closedMoves.count == 2 {
+                    var lineMoveCount = 0
+                    for move in closedMoves {
+                        if moves[move]?.player == player {
+                            lineMoveCount += 1
+                        }
+                        
+                        if lineMoveCount == 2 { return openMove }
+                    }
+                }
+            }
+        }
+        
+        return -1
+    }
+    
+    func findBlockingMove(in moves: [Move?]) -> Int {
+        let oppWinMove = findWinningMove(for: .Human, in: moves)
+        if oppWinMove != -1 { return oppWinMove }
+        let centerMove = 4
+        if moves[centerMove] == nil { return centerMove }
+        
+        let winPatterns = getWinPatterns()
+        let openMoves = getOpenMoves(in: moves)
+        
+        for openMove in openMoves {
+            for pattern in winPatterns {
+                let closedMoves = pattern.filter { idx in
+                    return idx != openMove
+                }
+
+                if closedMoves.count == 1 {
+                    let closedMove = closedMoves[0]
+                    if moves[closedMove]?.player == .Human {
+                        let openLineMoves = pattern.filter { idx in
+                            return idx != closedMove
+                        }
+                        
+                        return openLineMoves.randomElement()!
+                    }
+                }
+            }
+        }
+        
+        return -1
     }
 }
 
