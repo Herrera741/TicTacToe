@@ -1,5 +1,5 @@
 //
-//  MenuSheetVC.swift
+//  MenuVC.swift
 //  TicTacToe
 //
 //  Created by Sergio Herrera on 3/15/23.
@@ -11,52 +11,47 @@ protocol MenuSheetDelegate {
     func didTapPlayButton(isSinglePlayer: Bool, level: Int)
 }
 
-class MenuSheetVC: UIViewController {
+class MenuVC: UIViewController {
     
     // MARK: uiview variables
-    var titleLabel = UILabel()
-    var labelsSV = UIStackView()
-    var modesSV = UIStackView()
-    var skillLevelsSV = UIStackView()
+    var titleLabel = CustomMenuLabel(text: "You Win!",
+                                     textAlignment: .center,
+                                     font: .systemFont(ofSize: 28, weight: .heavy))
+    
+    var modeControl = CustomMenuControl()
+    var labelsSV = CustomMenuStack(axis: .vertical, spacing: 5, alignment: .trailing)
+    var modesSV = CustomMenuStack()
+    var skillLevelsSV = CustomMenuStack()
     var playButton = UIButton()
     
     // MARK: game variables
-    var winner: String
-    var scores: [Int]
+    var winner: String = "you win!"
+    var scores: [Int] = [0, 0]
     var players = ["Human", "AI"]
     var singlePlayerMode = true
-    var skillLevel: Int
+    var skillLevel: Int = 0
     var delegate: MenuSheetDelegate?
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         view.backgroundColor = UIColor(named: "surfaceColor")
         setupUI()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if isBeingDismissed {
             delegate?.didTapPlayButton(isSinglePlayer: singlePlayerMode, level: skillLevel)
+            print("MenuVC was dismissed")
         }
     }
     
-    init(winner: String, scores: [Int], skillLevel: Int) {
-        self.winner = winner
-        self.scores = scores
-        self.skillLevel = skillLevel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     func setupUI() {
+        view.addSubview(titleLabel)
+        view.addSubview(labelsSV)
+        view.addSubview(modesSV)
+        view.addSubview(skillLevelsSV)
+        view.addSubview(playButton)
+        
         configTitleLabel()
         
         if !winner.isEmpty {
@@ -70,13 +65,7 @@ class MenuSheetVC: UIViewController {
     
     // MARK: title ui
     func configTitleLabel() {
-        view.addSubview(titleLabel)
-        
-        titleLabel.text = getTitleLabelText(title: winner)
-        titleLabel.textColor = .white
-        titleLabel.font = .systemFont(ofSize: 28, weight: .heavy)
-        titleLabel.textAlignment = .center
-        
+//        view.addSubview(titleLabel)
         setTitleLabelConstraints()
     }
     
@@ -101,13 +90,7 @@ class MenuSheetVC: UIViewController {
 
     // MARK: labels ui
     func configLabelsSV() {
-        view.addSubview(labelsSV)
-        
-        labelsSV.axis = .vertical
-        labelsSV.distribution = .fill
-        labelsSV.spacing = 5
-        labelsSV.alignment = .trailing
-        labelsSV.isHidden = winner == "" ? true : false
+//        view.addSubview(labelsSV)
         
         addToLabelsSV()
         setLabelsSVConstraints()
@@ -117,8 +100,7 @@ class MenuSheetVC: UIViewController {
         let numberOfLabels = 2
         
         for index in 0..<numberOfLabels {
-            let label = MenuLabel()
-            label.text = "\(players[index]) Score: \(scores[index])"
+            let label = CustomMenuLabel(text: "\(players[index]) Score: \(scores[index])")
             labelsSV.addArrangedSubview(label)
         }
     }
@@ -131,33 +113,21 @@ class MenuSheetVC: UIViewController {
     
     // MARK: modes ui
     func configModesSV() {
-        view.addSubview(modesSV)
-        
-        modesSV.axis = .horizontal
-        modesSV.distribution = .fill
-        modesSV.spacing = 15
+//        view.addSubview(modesSV)
         
         addToModesSV()
         setModesSVConstraints()
     }
     
     func addToModesSV() {
-        let modeLabel = UILabel()
-        modeLabel.text = "Mode:"
-        modeLabel.font = UIFont.systemFont(ofSize: 20)
-        modeLabel.textAlignment = .right
-        modeLabel.textColor = .white
+        let modeLabel = CustomMenuLabel(text: "Mode:")
         modeLabel.translatesAutoresizingMaskIntoConstraints = false
         modeLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
-        let modeControl = UISegmentedControl(
-            items: [UIImage(systemName: "person.fill") ?? "",
-                    UIImage(systemName: "person.2.fill") ?? ""])
+        let items: [Any] = [UIImage(systemName: "person.fill") ?? "", UIImage(systemName: "person.2.fill") ?? ""]
+        let modeControl = CustomMenuControl(items: items)
         modeControl.addTarget(self, action: #selector(modeDidChange), for: .valueChanged)
-        modeControl.selectedSegmentIndex = singlePlayerMode ? 0 : 1
-        modeControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        modeControl.selectedSegmentTintColor = .systemTeal
-        modeControl.backgroundColor = .systemGray
+        
         modeControl.translatesAutoresizingMaskIntoConstraints = false
         modeControl.widthAnchor.constraint(equalToConstant: 200).isActive = true
         
@@ -177,31 +147,20 @@ class MenuSheetVC: UIViewController {
     
     // MARK: skill levels ui
     func configSkillLevelsSV() {
-        view.addSubview(skillLevelsSV)
-        
-        skillLevelsSV.axis = .horizontal
-        skillLevelsSV.distribution = .fill
-        skillLevelsSV.spacing = 15
+//        view.addSubview(skillLevelsSV)
         
         addToSkillLevelsSV()
         setSkillLevelsSVConstraints()
     }
     
     func addToSkillLevelsSV() {
-        let modeLevel = UILabel()
-        modeLevel.text = "Skill Level:"
-        modeLevel.font = UIFont.systemFont(ofSize: 20)
-        modeLevel.textAlignment = .right
-        modeLevel.textColor = .white
+        let modeLevel = CustomMenuLabel(text: "Skill Level:")
         modeLevel.translatesAutoresizingMaskIntoConstraints = false
         modeLevel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
-        let modeControl = UISegmentedControl(items: ["Easy", "Medium", "Hard"])
+        let modeControl = CustomMenuControl(items: ["Easy", "Medium", "Hard"])
         modeControl.addTarget(self, action: #selector(skillDidChange), for: .valueChanged)
-        modeControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        modeControl.selectedSegmentIndex = skillLevel - 1
-        modeControl.selectedSegmentTintColor = .systemTeal
-        modeControl.backgroundColor = .systemGray
+        
         modeControl.translatesAutoresizingMaskIntoConstraints = false
         modeControl.widthAnchor.constraint(equalToConstant: 200).isActive = true
         
@@ -221,7 +180,7 @@ class MenuSheetVC: UIViewController {
     
     // MARK: play button ui
     func configButton() {
-        view.addSubview(playButton)
+//        view.addSubview(playButton)
         
         playButton.setTitle(winner == "" ? "Play" : "Play Again", for: .normal)
         playButton.setTitleColor(.white, for: .normal)

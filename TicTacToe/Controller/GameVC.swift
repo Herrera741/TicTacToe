@@ -18,7 +18,7 @@ struct Move {
     let boardIndex: Int
 }
 
-class GameVC: UIViewController, MenuSheetDelegate {
+class GameVC: UIViewController {
     
     // MARK: iboutlets
     @IBOutlet weak var turnLbl: UILabel!
@@ -72,8 +72,8 @@ class GameVC: UIViewController, MenuSheetDelegate {
     }
     
     func showMenu(winner: String, scores: [Int]) {
-        let menuVC = MenuSheetVC(winner: winner, scores: scores, skillLevel: skillLevel)
-        menuVC.delegate = self
+        let menuVC = MenuVC()
+//        menuVC.delegate = self
         if let sheet = menuVC.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true
