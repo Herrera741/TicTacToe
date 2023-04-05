@@ -52,23 +52,15 @@ class MenuVC: UIViewController {
         view.addSubview(skillLevelsSV)
         view.addSubview(playButton)
         
-        configTitleLabel()
-        
-        if !winner.isEmpty {
-            configLabelsSV()
-        }
-        
+        configLabelsSV()
         configModesSV()
         configSkillLevelsSV()
         configButton()
+        
+        addConstraints()
     }
     
     // MARK: title ui
-    func configTitleLabel() {
-//        view.addSubview(titleLabel)
-        setTitleLabelConstraints()
-    }
-    
     func getTitleLabelText(title: String) -> String {
         switch title {
         case "You":
@@ -81,19 +73,10 @@ class MenuVC: UIViewController {
             return "Tic Tac Toe"
         }
     }
-    
-    func setTitleLabelConstraints() {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: winner.isEmpty ? 80 : 50).isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-    }
 
     // MARK: labels ui
     func configLabelsSV() {
-//        view.addSubview(labelsSV)
-        
         addToLabelsSV()
-        setLabelsSVConstraints()
     }
     
     func addToLabelsSV() {
@@ -103,20 +86,13 @@ class MenuVC: UIViewController {
             let label = CustomMenuLabel(text: "\(players[index]) Score: \(scores[index])")
             labelsSV.addArrangedSubview(label)
         }
-    }
-    
-    func setLabelsSVConstraints() {
-        labelsSV.translatesAutoresizingMaskIntoConstraints = false
-        labelsSV.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35).isActive = true
-        labelsSV.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor).isActive = true
+        
+        labelsSV.isHidden = true
     }
     
     // MARK: modes ui
     func configModesSV() {
-//        view.addSubview(modesSV)
-        
         addToModesSV()
-        setModesSVConstraints()
     }
     
     func addToModesSV() {
@@ -126,17 +102,11 @@ class MenuVC: UIViewController {
         
         let items: [Any] = [UIImage(systemName: "person.fill") ?? "", UIImage(systemName: "person.2.fill") ?? ""]
         let modeControl = CustomMenuControl(items: items)
-        modeControl.addTarget(self, action: #selector(modeDidChange), for: .valueChanged)
-        
         modeControl.translatesAutoresizingMaskIntoConstraints = false
         modeControl.widthAnchor.constraint(equalToConstant: 200).isActive = true
         
         modesSV.addArrangedSubview(modeLabel)
         modesSV.addArrangedSubview(modeControl)
-    }
-    
-    @objc func modeDidChange(_ segmentedControl: UISegmentedControl) {
-        singlePlayerMode.toggle()
     }
     
     func setModesSVConstraints() {
@@ -147,10 +117,7 @@ class MenuVC: UIViewController {
     
     // MARK: skill levels ui
     func configSkillLevelsSV() {
-//        view.addSubview(skillLevelsSV)
-        
         addToSkillLevelsSV()
-        setSkillLevelsSVConstraints()
     }
     
     func addToSkillLevelsSV() {
@@ -159,8 +126,6 @@ class MenuVC: UIViewController {
         modeLevel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         let modeControl = CustomMenuControl(items: ["Easy", "Medium", "Hard"])
-        modeControl.addTarget(self, action: #selector(skillDidChange), for: .valueChanged)
-        
         modeControl.translatesAutoresizingMaskIntoConstraints = false
         modeControl.widthAnchor.constraint(equalToConstant: 200).isActive = true
         
@@ -168,27 +133,13 @@ class MenuVC: UIViewController {
         skillLevelsSV.addArrangedSubview(modeControl)
     }
     
-    @objc func skillDidChange(_ segmentedControl: UISegmentedControl) {
-        skillLevel = segmentedControl.selectedSegmentIndex + 1
-    }
-    
-    func setSkillLevelsSVConstraints() {
-        skillLevelsSV.translatesAutoresizingMaskIntoConstraints = false
-        skillLevelsSV.topAnchor.constraint(equalTo: modesSV.bottomAnchor, constant: 10).isActive = true
-        skillLevelsSV.centerXAnchor.constraint(equalTo: modesSV.centerXAnchor).isActive = true
-    }
-    
     // MARK: play button ui
     func configButton() {
-//        view.addSubview(playButton)
-        
         playButton.setTitle(winner == "" ? "Play" : "Play Again", for: .normal)
         playButton.setTitleColor(.white, for: .normal)
         playButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         playButton.configuration = .filled()
         playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
-
-        setPlayButtonConstraints()
     }
     
     @objc func playButtonTapped() {
@@ -196,11 +147,31 @@ class MenuVC: UIViewController {
         dismiss(animated: true)
     }
     
-    func setPlayButtonConstraints() {
-        playButton.translatesAutoresizingMaskIntoConstraints = false
-        playButton.topAnchor.constraint(equalTo: skillLevelsSV.bottomAnchor, constant: 50).isActive = true
-        playButton.centerXAnchor.constraint(equalTo: skillLevelsSV.centerXAnchor).isActive = true
-        playButton.widthAnchor.constraint(equalToConstant: 230).isActive = true
-        playButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    func addConstraints() {
+        let subViews = [titleLabel, labelsSV, modesSV, skillLevelsSV, playButton]
+        for subView in subViews {
+            subView.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        let isFirstGame = scores[0] == 0 && scores[1] == 0
+        
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: isFirstGame ? 80 : 50),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            labelsSV.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35),
+            labelsSV.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
+
+            modesSV.topAnchor.constraint(equalTo: isFirstGame ? titleLabel.bottomAnchor : labelsSV.bottomAnchor, constant: 40),
+            modesSV.centerXAnchor.constraint(equalTo: labelsSV.centerXAnchor),
+
+            skillLevelsSV.topAnchor.constraint(equalTo: modesSV.bottomAnchor, constant: 10),
+            skillLevelsSV.centerXAnchor.constraint(equalTo: modesSV.centerXAnchor),
+
+            playButton.topAnchor.constraint(equalTo: skillLevelsSV.bottomAnchor, constant: 50),
+            playButton.centerXAnchor.constraint(equalTo: skillLevelsSV.centerXAnchor),
+            playButton.widthAnchor.constraint(equalToConstant: 230),
+            playButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
 }
