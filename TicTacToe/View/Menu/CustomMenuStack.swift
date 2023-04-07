@@ -9,7 +9,7 @@ import UIKit
 
 class CustomMenuStack: UIStackView {
     
-    init(axis: NSLayoutConstraint.Axis = .horizontal, distribution: Distribution = .fill, spacing: CGFloat = 15, alignment: Alignment = .center, isHidden: Bool = false) {
+    init(axis: NSLayoutConstraint.Axis = .horizontal, distribution: Distribution = .fill, spacing: CGFloat = 10, alignment: Alignment = .center, isHidden: Bool = false) {
         super.init(frame: .zero)
         self.axis = axis
         self.distribution = distribution

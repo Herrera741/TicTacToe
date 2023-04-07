@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B4209F9B29DD5E7A00DC1948 /* CustomMenuControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4209F9A29DD5E7A00DC1948 /* CustomMenuControl.swift */; };
 		B4209F9D29DD633200DC1948 /* CustomMenuStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4209F9C29DD633200DC1948 /* CustomMenuStack.swift */; };
+		B4209FA229DE2D6400DC1948 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4209FA129DE2D6400DC1948 /* MenuView.swift */; };
 		B4AA87D829C2EC4100F162DE /* MenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA87D729C2EC4100F162DE /* MenuVC.swift */; };
 		B4CB4EDC29CD8BE500B4183D /* CustomMenuLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CB4EDB29CD8BE500B4183D /* CustomMenuLabel.swift */; };
 		B4DBB20C29B5814600CE4BC0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBB20B29B5814600CE4BC0 /* AppDelegate.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		B4209F9A29DD5E7A00DC1948 /* CustomMenuControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuControl.swift; sourceTree = "<group>"; };
 		B4209F9C29DD633200DC1948 /* CustomMenuStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuStack.swift; sourceTree = "<group>"; };
+		B4209FA129DE2D6400DC1948 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		B4AA87D729C2EC4100F162DE /* MenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuVC.swift; sourceTree = "<group>"; };
 		B4CB4EDB29CD8BE500B4183D /* CustomMenuLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuLabel.swift; sourceTree = "<group>"; };
 		B4DBB20829B5814600CE4BC0 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +55,7 @@
 				B4CB4EDB29CD8BE500B4183D /* CustomMenuLabel.swift */,
 				B4209F9A29DD5E7A00DC1948 /* CustomMenuControl.swift */,
 				B4209F9C29DD633200DC1948 /* CustomMenuStack.swift */,
+				B4209FA129DE2D6400DC1948 /* MenuView.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 				B4DBB21029B5814600CE4BC0 /* LoadingVC.swift in Sources */,
 				B4209F9B29DD5E7A00DC1948 /* CustomMenuControl.swift in Sources */,
 				B4DBB20C29B5814600CE4BC0 /* AppDelegate.swift in Sources */,
+				B4209FA229DE2D6400DC1948 /* MenuView.swift in Sources */,
 				B4DBB22129B582EF00CE4BC0 /* GameVC.swift in Sources */,
 				B4DBB20E29B5814600CE4BC0 /* SceneDelegate.swift in Sources */,
 				B4209F9D29DD633200DC1948 /* CustomMenuStack.swift in Sources */,
