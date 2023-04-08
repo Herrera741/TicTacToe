@@ -7,38 +7,57 @@
 
 import UIKit
 
+struct MenuSelection {
+    var mode: Int
+    var skill: Int
+}
+
 class MenuVC: UIViewController {
-    
-    // MARK: menu view variables
-    let menuView = MenuView(frame: UIScreen.main.bounds)
-    var delegate: MenuViewDelegate?
-    
-    // MARK: game declarations
-    var titleText: String = "You Win!"
-    var scores: [Int] = [0, 0]
-//    var players = ["Human", "AI"]
+
+    // MARK: view instances
+    let menuView = MenuView()
+    var menuVM = MenuVM()
 
     // MARK: class view lifecycle methods
     override func viewDidLoad() {
         view.backgroundColor = .blue
-        self.view = menuView
-        hideLabelsOnFirstGame()
+        view = menuView
+        updateMenu()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if isBeingDismissed {
-            delegate?.didTapPlayButton(playerMode: menuView.playerModeControl.selectedSegmentIndex, skillLevel: menuView.skillLevelControl.selectedSegmentIndex)
+            sendMenuSelectionToMenuVM()
         }
     }
     
-    // MARK: menu labels check
-    func hideLabelsOnFirstGame() {
-        let isFirstGame = scores[0] == 0 && scores[1] == 0
-        if isFirstGame {
-            self.menuView.labelsSV.subviews[0].isHidden = true
-            self.menuView.labelsSV.subviews[1].isHidden = true
-            self.menuView.labelsSV.isHidden = true
+    // MARK: update menu with data
+    func updateMenu() {
+        if menuVM.isFirstGame {
+            menuView.playerOneScoreLabel.isHidden = true
+            menuView.playerTwoScoreLabel.isHidden = true
+            menuView.scoresSV.isHidden = true
         }
+        
+        menuView.titleLabel.text = menuVM.titleText
+        configPlayButton()
+    }
+    
+    // MARK: event listener
+    func configPlayButton() {
+        menuView.playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+    }
+                             
+    @objc func playButtonTapped() {
+        sendMenuSelectionToMenuVM()
+        dismiss(animated: true)
+    }
+    
+    func sendMenuSelectionToMenuVM() {
+        let menuSelection = MenuSelection(
+            mode: menuView.playerModeControl.selectedSegmentIndex,
+            skill: menuView.skillLevelControl.selectedSegmentIndex)
+        menuVM.menuSelection = menuSelection
     }
 }
